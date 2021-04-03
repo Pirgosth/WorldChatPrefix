@@ -1,17 +1,18 @@
 package io.github.pirgosth.worldchatprefix;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Config {
 	
 	private FileConfiguration config = null;
-	private Map<String, String> worldPrefixes = null;
+
+	//Key is the group name, Value is information to display in chat for given worlds
+	private Map<String, GroupInfo> worldPrefixes = null;
 	
 	public Config() {
 		this.config = WorldChatPrefix.getInstance().getConfig();
@@ -20,13 +21,13 @@ public class Config {
 	
 	public void loadPrefixes() {
 		this.worldPrefixes = new HashMap<>();
-		ConfigurationSection section = this.config.getConfigurationSection("worlds");
+		ConfigurationSection section = this.config.getConfigurationSection("groups");
 		if(section == null) {
-			this.config.createSection("worlds");
+			this.config.createSection("groups");
 			return;
 		}
-		for(String world: section.getKeys(false)) {
-			this.worldPrefixes.put(world, this.config.getString("worlds." + world + ".prefix", ""));
+		for(String group: section.getKeys(false)) {
+			this.worldPrefixes.put(group, new GroupInfo(this.config.getStringList("groups." + group + ".worlds"), this.config.getString("groups." + group + ".prefix", "")));
 		}
 	}
 	
@@ -38,7 +39,12 @@ public class Config {
 	}
 	
 	public String getWorldPrefix(String worldName) {
-		String prefix = this.worldPrefixes.get(worldName);
+		String prefix = null;
+		for(GroupInfo group : this.worldPrefixes.values()){
+			if(group.worlds.contains(worldName)){
+				prefix = group.prefix;
+			}
+		}
 		return prefix == null ? "" : ChatColor.translateAlternateColorCodes('&', prefix);
 	}
 	
