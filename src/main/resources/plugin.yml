@@ -1,10 +1,14 @@
 name: WorldChatPrefix
 main: io.github.pirgosth.worldchatprefix.WorldChatPrefix
 version: 1.0
-api-version: 1.15
+api-version: 1.18
 softdepend: [Multiverse-Core]
 author: Pirgosth
 commands:
   wcp:
     description: WorldChatPrefix config command
     usage: /<command> [reload]
+permissions:
+  worldchatprefix.commands.reload:
+    description: Allow player to perform reload command
+    default: false

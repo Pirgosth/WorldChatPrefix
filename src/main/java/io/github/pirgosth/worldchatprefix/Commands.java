@@ -1,26 +1,19 @@
 package io.github.pirgosth.worldchatprefix;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import io.github.pirgosth.liberty.core.api.commands.ICommandListener;
+import io.github.pirgosth.liberty.core.api.commands.annotations.LibertyCommand;
+import io.github.pirgosth.liberty.core.api.commands.annotations.LibertyCommandPermission;
+import io.github.pirgosth.liberty.core.api.utils.ChatUtils;
+import io.github.pirgosth.liberty.core.commands.CommandParameters;
 
-import net.md_5.bungee.api.ChatColor;
+public class Commands implements ICommandListener {
 
-public class Commands implements CommandExecutor {
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(args.length != 1) {
-			return false;
-		}
-		
-		if(args[0].equalsIgnoreCase("reload")) {
-			WorldChatPrefix.getMainConfig().reload();
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&aWorldChatPrefix&7] reloaded successfully !"));
-			return true;
-		}
-		
-		return false;
+	@LibertyCommand(command = "wcp.reload")
+	@LibertyCommandPermission(permission = "worldchatprefix.commands.reload")
+	public boolean reloadCommand(CommandParameters params) {
+		WorldChatPrefix.getMainConfig().reload();
+		ChatUtils.sendColorMessage(params.sender, "&7[&aWorldChatPrefix&7] reloaded successfully !");
+		return true;
 	}
 
 }

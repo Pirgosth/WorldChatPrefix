@@ -1,5 +1,6 @@
 package io.github.pirgosth.worldchatprefix;
 
+import io.github.pirgosth.liberty.core.LibertyCore;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.Getter;
@@ -17,7 +18,6 @@ public class WorldChatPrefix extends JavaPlugin{
 		mainConfig = new Config();
 		mainConfig.loadPrefixes();
 		this.getServer().getPluginManager().registerEvents(new ChatListener(), this);
-		this.getCommand("wcp").setExecutor(new Commands());
-		this.getCommand("wcp").setTabCompleter(new AutoCompletion());
+		LibertyCore.getInstance().getCommandRegister().register(this, new Commands());
 	}
 }
